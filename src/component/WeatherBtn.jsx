@@ -1,26 +1,39 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
 
-const WeatherBtn = ({ cities, setCity, changeCurrent, city }) => {
+/**
+ * props:
+ * - cities: array of city strings
+ * - handleCityChange: fn(selected) -> "current" or cityName
+ * - selectedCity: null for current, or city string
+ */
+
+const WeatherBtn = ({ cities, handleCityChange, selectedCity }) => {
   return (
-    <div className="weather-btn">
-      <Button
-        variant={city === '' ? 'warning' : 'outline-warning'}
-        className="btn"
-        onClick={() => changeCurrent('current')}
+    <div className="d-flex flex-wrap gap-2">
+      <button
+        className={`btn btn-sm city-btn ${
+          selectedCity === null ? 'active-city' : ''
+        }`}
+        onClick={() => handleCityChange('current')}
       >
-        Current Location
-      </Button>
-      {cities.map((item, index) => (
-        <Button
-          key={index}
-          variant={city === item ? 'warning' : 'outline-warning'}
-          className="btn"
-          onClick={() => changeCurrent(item)}
-        >
-          {item}
-        </Button>
-      ))}
+        Current
+      </button>
+
+      {cities.map((c) => {
+        // match ignoring case for highlight (user-friendly)
+        const isActive =
+          selectedCity && selectedCity.toLowerCase() === c.toLowerCase();
+
+        return (
+          <button
+            key={c}
+            className={`btn btn-sm city-btn ${isActive ? 'active-city' : ''}`}
+            onClick={() => handleCityChange(c)}
+          >
+            {c}
+          </button>
+        );
+      })}
     </div>
   );
 };
